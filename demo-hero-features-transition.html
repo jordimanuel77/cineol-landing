@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo: transición Hero → Features (sticky parallax)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+
+  section {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    z-index: 1;
+    background: #1a1a2e;
+  }
+  .hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Proporción del crop DESKTOP (ejemplo: diseñado a 1440x1450 en Figma).
+       Con width:100%, la altura en px se recalcula sola según el ancho real. */
+    aspect-ratio: 1440 / 1450;
+    background: linear-gradient(180deg, #ff9966 0%, #ff5e62 40%, #4b3f72 75%, #241c3a 100%);
+    will-change: transform;
+  }
+  /* Crop MOBILE distinto (placeholder — sustituir por la proporción real de Figma) */
+  @media (max-width: 768px) {
+    .hero-bg {
+      aspect-ratio: 390 / 700;
+    }
+  }
+  .mountain-marker {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+    white-space: nowrap;
+  }
+  .hero-content {
+    position: relative;
+    text-align: center;
+    color: white;
+    will-change: transform;
+  }
+  .hero-content h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    letter-spacing: -0.02em;
+  }
+  .hero-content p {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    opacity: 0.85;
+  }
+  .hero-note {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.7);
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ---- FEATURES ---- */
+  .features {
+    z-index: 2;
+    background: #0a0a0a;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .features h2 {
+    color: white;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+  }
+  .cards {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 2rem;
+  }
+  .card {
+    width: 220px;
+    height: 140px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---- SPACER para poder seguir haciendo scroll tras ver el efecto ---- */
+  .spacer {
+    position: relative;
+    z-index: 3;
+    height: 100vh;
+    background: #111;
+    color: #555;
+    font-size: 1.1rem;
+  }
+</style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-bg" id="heroBg">
+      <div class="mountain-marker">🏔️ Letrero de Hollywood (oculto al cargar)</div>
+    </div>
+    <div class="hero-content" id="heroContent">
+      <h1>Cineol</h1>
+      <p>El cine, reinventado</p>
+    </div>
+    <div class="hero-note">Haz scroll ↓</div>
+  </section>
+
+  <section class="features">
+    <h2>Features de Cineol</h2>
+    <div class="cards">
+      <div class="card" data-card>Feature 1</div>
+      <div class="card" data-card>Feature 2</div>
+      <div class="card" data-card>Feature 3</div>
+    </div>
+  </section>
+
+  <section class="spacer">
+    (aquí seguiría el resto de la landing — CTA, etc.)
+  </section>
+
+  <script>
+    // Parallax calculado: revela el fondo del Hero (letrero de Hollywood)
+    // exactamente durante el tramo de scroll en que Features lo cubre (1 viewport).
+    const heroBg = document.getElementById('heroBg');
+    const heroContent = document.getElementById('heroContent');
+
+    function updateHeroParallax() {
+      const vh = window.innerHeight;
+      const bgHeight = heroBg.getBoundingClientRect().height; // medido en tiempo real, no hardcodeado
+      const hiddenHeight = Math.max(bgHeight - vh, 0); // lo que queda oculto por defecto
+      const progress = Math.min(Math.max(window.scrollY / vh, 0), 1); // 0→1 durante el pin del Hero
+      heroBg.style.transform = `translateY(${-hiddenHeight * progress}px)`;
+
+      // El texto del Hero se desvanece un poco más rápido que el reveal de fondo
+      heroContent.style.transform = `translateY(${progress * 60}px)`;
+      heroContent.style.opacity = 1 - progress * 1.3;
+    }
+
+    window.addEventListener('scroll', updateHeroParallax);
+    window.addEventListener('resize', updateHeroParallax);
+    updateHeroParallax();
+
+    // Animación de las features al entrar en viewport (IntersectionObserver)
+    const cards = document.querySelectorAll('[data-card]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 120);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    cards.forEach(card => observer.observe(card));
+  </script>
+
+</body>
+</html>

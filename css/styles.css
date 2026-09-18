@@ -1,0 +1,518 @@
+:root {
+  /* Tokens de marca extraídos del archivo de Figma de Cineol */
+  --cineol-black: #201f23;
+  --cineol-white: #ffffff;
+  --cineol-border: #e5e5e5;
+  --cineol-secondary: #4c4b53;
+  --cineol-placeholder: #6f6d78;
+  --cineol-brand-blue: #155dfc;
+  --blue-50: #eff6ff;
+  --gray-400: #9ca3af;
+  --pink-utility: #f9e0fa;
+  --neutral-700: #404040;
+  --zinc-200: #e4e4e7;
+  --zinc-900: #18181b;
+  --slate-900: #0f172a;
+  --slate-700: #334155;
+  --slate-50: #f8fafc;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+/* min-height (no height): con "height:100%" en un documento cuyo contenido
+   desborda el viewport, el motor trata el body como si midiera solo 1 viewport
+   a efectos de "position:sticky", y el Hero (100vh) se queda sin margen para
+   pegarse — por eso no se quedaba fijo al hacer scroll. */
+html, body { min-height: 100%; }
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #000000; /* negro real de la página, no el token de componente */
+}
+
+section {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ---- HERO ---- */
+/* Alto fijo en vh (no en función del ancho de la imagen): así el punto en el
+   que aparece el letrero es siempre el mismo, sea cual sea la forma de la
+   ventana. object-fit:cover rellena ese alto recortando los laterales si
+   hace falta, pero nunca encoge ni deja bordes vacíos. Sigue sin sticky:
+   es más alto que 1 viewport y fluye con normalidad en el documento. */
+.hero {
+  position: relative;
+  top: auto;
+  height: 130vh;
+  overflow: hidden;
+  z-index: 1;
+  background: #000000;
+}
+/* Funde el borde inferior de la ilustración (no es negro puro) con el
+   fondo de Features, para que no se note el corte entre secciones. */
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20vh;
+  background: linear-gradient(to bottom, transparent, #010e21);
+  pointer-events: none;
+}
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  user-select: none;
+  pointer-events: none;
+}
+.hero-content {
+  position: absolute; /* superpuesto sobre hero-bg, no empuja su altura */
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 112px 1.5rem 0;
+}
+.hero-logo {
+  height: 32px;
+  width: auto;
+}
+.hero-content h1 {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: clamp(2.2rem, 5.2vw, 5rem);
+  line-height: 1.1;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  max-width: 1108px;
+}
+.hero-content p {
+  font-weight: 500;
+  font-size: clamp(1.1rem, 2vw, 2rem);
+  letter-spacing: -0.02em;
+  opacity: 0.9;
+}
+
+/* ---- FEATURES ---- */
+/* Anula la regla genérica sticky/100vh: esta sección crece con su contenido
+   (grid bento de varias filas), solo el Hero necesita quedarse fijado detrás. */
+.features {
+  position: relative;
+  top: auto;
+  height: auto;
+  min-height: 100vh;
+  overflow: visible;
+  z-index: 2;
+  background: #010e21;
+  color: white;
+  padding: 12vh 6vw;
+}
+.features-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.features-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.features-heading h2,
+.features-heading-icon {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.features-heading-icon {
+  transition-delay: 0.2s; /* el icono entra un poco después que el título */
+}
+.features-heading.visible h2 {
+  opacity: 1;
+  transform: translateY(0);
+}
+.features-heading.visible .features-heading-icon {
+  opacity: 0.9;
+  transform: translateY(0);
+}
+.features-heading h2 {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: clamp(1.8rem, 3.6vw, 3.5rem);
+  line-height: 1.15;
+  max-width: 728px;
+}
+.features-heading-icon {
+  flex-shrink: 0;
+  height: 40px;
+  width: auto;
+}
+
+.features-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.features-row {
+  display: flex;
+  gap: 3rem;
+}
+.features-row--top {
+  align-items: stretch;
+}
+.feature-col {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.feature-subrow {
+  display: flex;
+  gap: 3rem;
+}
+
+/* Tarjetas: base común */
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  opacity: 0;
+  transform: translateY(28px); /* entra desde abajo, desplazamiento sutil */
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition-delay: var(--reveal-delay, 0s);
+}
+.feature-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.feature-copy {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  color: var(--gray-400);
+}
+.feature-copy strong {
+  color: white;
+  font-weight: 500;
+}
+/* Squircle: esquinas suaves y continuas tipo iOS. Un mask SVG estirado al
+   100%/100% de cada caja distorsiona en óvalo las cajas no cuadradas (lo
+   probé y se veía fatal), así que en su lugar se usa un border-radius
+   generoso con una curva ligeramente más suave que el arco por defecto
+   (aproximación práctica; el "corner smoothing" exacto de Figma no es
+   replicable 1:1 en CSS estándar sin un mask por-elemento). */
+.squircle {
+  border-radius: 32px; /* radio real de Figma */
+  /* Esquina squircle (continuidad tipo iOS) vía CSS nativo: si el navegador
+     no soporta "corner-shape" (aún experimental, solo Chromium reciente),
+     esta línea se ignora sin más y se queda el border-radius normal. */
+  corner-shape: squircle;
+}
+.feature-media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+.feature-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Tarjeta alta (columna izquierda, fila superior) */
+.feature-card--tall {
+  flex: 0 0 448px;
+  max-width: 448px;
+}
+.feature-card--tall .feature-media--fill {
+  flex: 1;
+  aspect-ratio: auto;
+}
+.features-row--top .feature-col .feature-subrow .feature-card {
+  flex: 1 1 0;
+}
+
+/* Tarjeta de géneros (badges, sin imagen): ocupa todo el alto disponible
+   de la columna (flex:1) y centra el contenido dentro. */
+.feature-card--genres {
+  flex: 1;
+  background: var(--slate-900);
+  border: 1px solid var(--slate-700);
+  padding: 2.5rem;
+  align-items: center;
+  justify-content: center;
+}
+.feature-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 12px; /* fila 20px, columna 12px - medidas reales de Figma */
+  justify-content: center;
+  align-content: center;
+}
+.genre-badge {
+  background: var(--slate-700);
+  color: var(--slate-50);
+  padding: 0.7rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.genre-badge--active {
+  background: var(--pink-utility);
+  color: var(--zinc-900);
+}
+.genre-badge svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Fila inferior: 3 tarjetas iguales */
+.features-row--bottom .feature-card {
+  flex: 1 1 0;
+}
+
+/* Logros / Próximamente: la imagen apenas se intuye, fundida con el fondo.
+   El fondo de esta tarjeta concreta es --cineol-black (#201f23), el mismo
+   token que usa Figma en esta capa - no el negro puro de la página. */
+.feature-card--upcoming .feature-media {
+  background: var(--cineol-black);
+}
+.feature-card--upcoming .feature-media img {
+  opacity: 0.08;
+}
+.feature-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--cineol-placeholder);
+  color: var(--zinc-200);
+  padding: 0.4rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .features-row,
+  .feature-subrow {
+    flex-direction: column;
+  }
+  .feature-card--tall {
+    flex-basis: auto;
+    max-width: none;
+  }
+  .features-heading {
+    flex-direction: column-reverse;
+  }
+}
+
+/* ---- CTA ---- */
+/* Igual que Features: anula sticky/100vh genérico, este bloque contiene
+   varias piezas (fachada, proyector, butacas) y su propio tramo pinned. */
+.cta {
+  position: relative;
+  top: auto;
+  height: auto;
+  overflow: visible;
+  z-index: 3;
+  background: #000000;
+}
+
+.cta-fachada,
+.cta-projector {
+  width: 100%;
+  line-height: 0;
+}
+.cta-fachada {
+  position: relative;
+}
+/* Funde el fondo de Features con la parte superior de la fachada (tampoco
+   es de un negro puro), para que no se note el corte entre secciones. */
+.cta-fachada::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20vh;
+  background: linear-gradient(to bottom, #010e21, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+.cta-fachada img,
+.cta-projector-base,
+.cta-projector-frame {
+  width: 100%;
+  display: block;
+}
+
+.cta-projector {
+  position: relative;
+}
+.cta-projector-base {
+  position: relative; /* fija la altura real del contenedor; nunca cambia */
+}
+/* Solo el haz de luz (franja central) hace crossfade entre frames; el resto
+   de la imagen (lámparas de pared, ventanas de proyección) viene siempre
+   de .cta-projector-base y no se mueve. El % debe cubrir el cono de luz
+   en su punto más ancho (arriba) sin llegar a las lámparas de los lados. */
+.cta-projector-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  clip-path: inset(0 28% 0 28%);
+  transition: opacity 0.1s ease;
+}
+.cta-projector-frame.is-active {
+  opacity: 1;
+}
+
+/* ---- Butacas: ciclo automático de frases (última sección, sin más
+   contenido debajo, así que no hace falta bloquear el scroll a mano: al
+   llegar aquí ya se está en el final del documento). ---- */
+.seats-wrapper {
+  position: relative;
+  height: 100vh;
+}
+.seats-pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  pointer-events: none; /* solo se activa el click en el estado final */
+}
+.seats-pin.is-final {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.seats-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: bottom center;
+}
+.seats-overlay {
+  position: absolute;
+  inset: 0;
+  text-align: center;
+  color: white;
+}
+/* .seats-line y .seats-welcome comparten exactamente la misma posición
+   (superpuestos vía position:absolute) para que el usuario siempre lea el
+   texto principal a la misma altura, sea cual sea la frase activa.
+   Posición anclada a la butaca, no a un px fijo: la butaca azul del asset
+   siempre aparece al 39.53vh de la imagen (constante, medido por color de
+   píxel - object-fit:cover con height:100vh hace que ese % no varíe con la
+   resolución). El bloque de 3 líneas (192px de alto en desktop, ver abajo)
+   debe terminar 16px por encima de ese punto, de ahí "39.53vh - 196px". */
+.seats-line,
+.seats-welcome {
+  position: absolute;
+  top: calc(39.53vh - 196px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+}
+.seats-line {
+  font-size: 56px;
+  font-weight: 500;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.seats-line.is-visible {
+  opacity: 1;
+}
+/* "Bienvenido a Cineol" y "Aquí tienes tu sitio" animan por separado y
+   escalonados (igual que "Pulsa sobre la butaca"): título primero,
+   subtítulo 0.15s después. */
+.seats-welcome h2,
+.seats-welcome p {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.seats-welcome h2 {
+  font-size: 56px;
+  font-weight: 500;
+}
+.seats-welcome p {
+  margin-top: 0.5rem;
+  font-size: 40px;
+  font-weight: 400;
+  transition-delay: 0.15s;
+}
+.seats-welcome.is-visible h2 {
+  opacity: 1;
+  transform: translateY(0);
+}
+.seats-welcome.is-visible p {
+  opacity: 0.8;
+  transform: translateY(0);
+}
+/* Encima de la butaca azul, no debajo - despejada de su silueta */
+.seats-cue {
+  position: absolute;
+  left: 50%;
+  top: calc(39.53vh - 38px);
+  transform: translateX(-50%) translateY(10px); /* entra con un pequeño desplazamiento hacia arriba, como las features */
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 18px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.seats-cue.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Los tamaños de fuente se reducen en móvil (si no, "Pulsa sobre la butaca"
+   no cabía sin solaparse con "Aquí tienes tu sitio"). El bloque, ya más
+   bajo (137px vs 180px en desktop), sigue anclado a la misma butaca al
+   39.53vh, terminando igualmente 16px por encima de ella. */
+@media (max-width: 600px) {
+  .seats-line,
+  .seats-welcome h2 {
+    font-size: 32px;
+  }
+  .seats-welcome p {
+    font-size: 22px;
+  }
+  .seats-line,
+  .seats-welcome {
+    top: calc(39.53vh - 153px);
+  }
+  .seats-cue {
+    font-size: 14px;
+    top: calc(39.53vh - 33px);
+  }
+}

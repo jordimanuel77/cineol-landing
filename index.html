@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cineol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<!-- Precarga la butaca iluminada: si no, la primera vez que se llega a la
+     frase final el navegador tiene que descargarla de golpe y el scroll
+     parece "atascarse" justo en esa transición. -->
+<link rel="preload" as="image" href="assets/3-butaca-2.webp">
+</head>
+<body>
+
+  <section class="hero" id="hero">
+    <img class="hero-bg" id="heroBg" src="assets/hero-bg.webp" alt="Vista nocturna del letrero de Hollywood">
+    <div class="hero-content" id="heroContent">
+      <img class="hero-logo" src="assets/cineol-wordmark-logo.svg" alt="Cineol">
+      <h1>Enamorados del séptimo arte, como si fuera el primero</h1>
+      <p>La primera red social hecha por cinéfilos, para cinéfilos, en español.</p>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="features-inner">
+
+      <div class="features-heading" id="featuresHeading">
+        <h2>Sigue a cinéfilos reales, guarda tu historial, descubre festivales, lee críticas y desbloquea logros. Todo en un solo lugar.</h2>
+        <img class="features-heading-icon" src="assets/features-subtract-icon.svg" alt="">
+      </div>
+
+      <div class="features-grid">
+
+        <div class="features-row features-row--top">
+          <article class="feature-card feature-card--tall" data-feature>
+            <p class="feature-copy"><strong>Comunidad de cinéfilos como tú.</strong> Sigue a usuarios reales. Lee sus valoraciones, sus listas, sus opiniones. Sin filtro de popularidad. Sin algoritmo.</p>
+            <div class="feature-media feature-media--fill squircle"><img src="assets/features-1-feed-bg.webp" alt="Feed social de Cineol" loading="lazy"></div>
+          </article>
+
+          <div class="feature-col">
+            <div class="feature-subrow">
+              <article class="feature-card" data-feature>
+                <p class="feature-copy"><strong>Archivo infinito. Todo lo que has visto y lo que te falta.</strong> Marca lo que has visto, lo que tienes pendiente, tu historial cinéfilo por fin ordenado.</p>
+                <div class="feature-media squircle"><img src="assets/features-2-valorar-bg.webp" alt="Valorar películas en Cineol" loading="lazy"></div>
+              </article>
+              <article class="feature-card" data-feature>
+                <p class="feature-copy"><strong>Festivales y premios. De Cannes a San Sebastián.</strong> Más de 300 festivales internacionales con palmarés completo. Crúzalos con lo que ya has visto.</p>
+                <div class="feature-media squircle"><img src="assets/features-3-festivales-bg.webp" alt="Festivales en Cineol" loading="lazy"></div>
+              </article>
+            </div>
+
+            <article class="feature-card feature-card--genres squircle" data-feature>
+              <div class="feature-genres">
+                <span class="genre-badge">Acción</span>
+                <span class="genre-badge">Animación</span>
+                <span class="genre-badge">Amor</span>
+                <span class="genre-badge genre-badge--active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Aventuras</span>
+                <span class="genre-badge">Bélico</span>
+                <span class="genre-badge">Ciencia Ficción</span>
+                <span class="genre-badge">Comedia</span>
+                <span class="genre-badge">Deportes</span>
+                <span class="genre-badge">Documental</span>
+                <span class="genre-badge">Drama</span>
+                <span class="genre-badge">Familiar</span>
+                <span class="genre-badge">Fantasía</span>
+                <span class="genre-badge">Gore</span>
+                <span class="genre-badge genre-badge--active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Histórico</span>
+                <span class="genre-badge genre-badge--active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Misterio</span>
+                <span class="genre-badge">Musical</span>
+                <span class="genre-badge">Noir</span>
+                <span class="genre-badge">Policiaco</span>
+                <span class="genre-badge">Terror</span>
+                <span class="genre-badge">Thriller</span>
+                <span class="genre-badge">Western</span>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="features-row features-row--bottom">
+          <article class="feature-card" data-feature>
+            <div class="feature-media squircle"><img src="assets/features-4-estrenos-bg.webp" alt="Estrenos en Cineol" loading="lazy"></div>
+            <p class="feature-copy"><strong>Estrenos. Lo que llega y no te puedes perder.</strong> Selección editorial semanal con recomendaciones argumentadas por el equipo de Cineol.</p>
+          </article>
+          <article class="feature-card" data-feature>
+            <div class="feature-media squircle"><img src="assets/features-5-articulos-bg.webp" alt="Artículos en Cineol" loading="lazy"></div>
+            <p class="feature-copy"><strong>Artículos y críticas. La otra forma de ver cine.</strong> Creado por el equipo editorial de Cineol. Noticias, críticas, coberturas de festivales.</p>
+          </article>
+          <article class="feature-card feature-card--upcoming" data-feature>
+            <div class="feature-media squircle">
+              <img src="assets/features-6-proximamente-bg.webp" alt="Logros en Cineol" loading="lazy">
+              <span class="feature-badge">Próximamente</span>
+            </div>
+            <p class="feature-copy"><strong>Que empiece el juego.</strong> Desbloquea logros según tus acciones y uso de Cineol. Tu historia cinéfila, contada en hitos.</p>
+          </article>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="cta">
+
+    <div class="cta-fachada">
+      <img src="assets/1-fachada-bg.webp" alt="Fachada de Cineol Club" loading="lazy">
+    </div>
+
+    <div class="cta-projector">
+      <img class="cta-projector-base" src="assets/2-sala-proyector-1.webp" alt="Sala de proyección de Cineol" loading="lazy">
+      <img class="cta-projector-frame is-active" src="assets/2-sala-proyector-1.webp" alt="" data-frame loading="lazy">
+      <img class="cta-projector-frame" src="assets/2-sala-proyector-2.webp" alt="" data-frame loading="lazy">
+      <img class="cta-projector-frame" src="assets/2-sala-proyector-3.webp" alt="" data-frame loading="lazy">
+    </div>
+
+    <div class="seats-wrapper" id="seatsWrapper">
+      <a class="seats-pin" id="seatsPin" href="#" aria-label="Entrar en Cineol">
+        <!-- TODO: sustituir href por la URL real de entrada a Cineol -->
+        <img class="seats-bg" id="seatsBg" src="assets/3-butaca-1.webp" alt="Butacas de cine, una de ellas en azul">
+        <div class="seats-overlay">
+          <p class="seats-line" id="seatsLine"></p>
+          <div class="seats-welcome" id="seatsWelcome">
+            <h2>Bienvenido a Cineol</h2>
+            <p>Aquí tienes tu sitio.</p>
+          </div>
+        </div>
+        <span class="seats-cue" id="seatsCue">Pulsa sobre la butaca</span>
+      </a>
+    </div>
+
+  </section>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
