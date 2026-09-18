@@ -98,10 +98,6 @@ const seatsCue = document.getElementById('seatsCue');
 
 const SEATS_LINES = [
   '¿Recuerdas la primera vez que fuiste al cine?',
-  '¿Con quién fuiste?',
-  '¿Qué película viste?',
-  'El olor a palomitas.',
-  'La cortina que se abre desvelando el secreto.',
   'Las primeras veces son las que siempre se recuerdan.'
 ];
 const TOTAL_ZONES = SEATS_LINES.length + 1; // +1 = estado final "Bienvenido a Cineol"
