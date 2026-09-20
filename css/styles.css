@@ -84,10 +84,17 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* centrado vertical en el primer viewport */
   gap: 2.5rem;
-  padding: 112px 1.5rem 0;
+  height: 100vh;
+  height: 100svh; /* alto visible real en móvil (sin barras del navegador) */
+  padding: 0 1.5rem;
 }
 .hero-logo {
+  position: absolute; /* fuera del flujo: el logo se queda en su sitio original */
+  top: 112px;
+  left: 50%;
+  transform: translateX(-50%);
   height: 32px;
   width: auto;
 }
@@ -104,6 +111,26 @@ section {
   font-size: clamp(1.1rem, 2vw, 2rem);
   letter-spacing: -0.02em;
   opacity: 0.9;
+}
+
+/* Aparición de los textos del hero: igual que la de las features (fade-in +
+   desplazamiento de 24px desde abajo, 0.8s); el subtítulo entra 0.2s después. */
+.hero-content h1,
+.hero-content p {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.hero-content p {
+  transition-delay: 0.2s;
+}
+.hero-content.visible h1 {
+  opacity: 1;
+  transform: translateY(0);
+}
+.hero-content.visible p {
+  opacity: 0.9;
+  transform: translateY(0);
 }
 
 /* ---- FEATURES ---- */

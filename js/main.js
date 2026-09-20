@@ -5,6 +5,20 @@
 // El "parallax" que se activa al ver el titular completo es el reveal de
 // las tarjetas de Features, justo debajo.
 
+// ---- Reveal de los textos del hero (mismo efecto que el titular de Features) ----
+const heroContent = document.getElementById('heroContent');
+if (heroContent) {
+  const heroObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        heroObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25 });
+  heroObserver.observe(heroContent);
+}
+
 // ---- Reveal de las features al entrar en el viewport (izquierda -> derecha) ----
 // No se observa cada tarjeta por separado: una tarjeta más alta (p.ej. la
 // de "Comunidad") tarda más en cruzar el umbral de visibilidad que sus
