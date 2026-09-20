@@ -446,10 +446,11 @@ section {
   margin: 0 auto;
   padding: 0 1.5rem;
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.8s ease; /* salida suave (crossfade con la frase siguiente) */
 }
 .seats-line.is-visible {
   opacity: 1;
+  transition: opacity 0.4s ease;
 }
 /* "Bienvenido a Cineol" y "Aquí tienes tu sitio" animan por separado y
    escalonados (igual que "Pulsa sobre la butaca"): título primero,
@@ -493,6 +494,41 @@ section {
 .seats-cue.is-visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* Loader ficticio: barra que se rellena durante toda la secuencia de la zona
+   de butacas para indicar cuánto falta hasta que la butaca es clicable.
+   128x5, extremos redondos, fondo blanco al 20 %, relleno --cineol-brand-blue
+   (= Cineol/brand-new-car en Figma, #155dfc) al 100 %,
+   de izquierda a derecha. Centrada sobre el logo de 3-butaca-2.webp
+   (centro al 1173/2560 = 45.82vh). */
+.seats-loader {
+  position: absolute;
+  left: 50%;
+  top: calc(45.82vh - 2.5px);
+  width: 128px;
+  height: 5px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: none; /* al ocultarse desaparece de golpe, sin fade-out */
+}
+.seats-loader.is-visible {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+.seats-loader-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--cineol-brand-blue);
+}
+.seats-loader.is-running .seats-loader-fill {
+  width: 100%;
+  transition: width var(--loader-duration, 8s) linear;
 }
 
 /* Los tamaños de fuente se reducen en móvil (si no, "Pulsa sobre la butaca"

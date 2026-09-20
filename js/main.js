@@ -95,10 +95,17 @@ const seatsBg = document.getElementById('seatsBg');
 const seatsLine = document.getElementById('seatsLine');
 const seatsWelcome = document.getElementById('seatsWelcome');
 const seatsCue = document.getElementById('seatsCue');
+const seatsLoader = document.getElementById('seatsLoader');
+// Segundo <p> idéntico al primero: las frases se alternan entre los dos para
+// que la nueva entre mientras la anterior se desvanece (sin hueco entre ellas).
+const seatsLineB = seatsLine.cloneNode(false);
+seatsLineB.removeAttribute('id');
+seatsLine.after(seatsLineB);
+const seatsLines = [seatsLine, seatsLineB];
 
 const SEATS_LINES = [
   '¿Recuerdas la primera vez que fuiste al cine?',
-  'Las primeras veces son las que siempre se recuerdan.'
+  'Las primeras veces nunca se olvidan.'
 ];
 const TOTAL_ZONES = SEATS_LINES.length + 1; // +1 = estado final "Bienvenido a Cineol"
 const FINAL_ZONE = TOTAL_ZONES - 1;
@@ -108,23 +115,51 @@ const ZONE_DURATION = 3000; // ms que se queda cada frase en pantalla
 // (WELCOME_DELAY) y solo entonces empieza la cascada de texto; el aviso
 // "Pulsa sobre la butaca" llega el último, tras la cascada (CUE_DELAY).
 const WELCOME_DELAY = 900;
+
+// La última frase se desvanece por completo (FADE_OUT, igual que la transición
+// de .seats-line en el CSS) justo antes de que se ilumine el fondo de la butaca.
+const FADE_OUT = 800;
 const CUE_DELAY = 1900;
+
+// El loader (sobre el sitio donde saldrá el logo de la butaca) se rellena
+// desde que aparece la primera frase, calculado para completarse justo cuando
+// aparece "Pulsa sobre la butaca". Se oculta de golpe (sin fade) antes, en
+// cuanto se ilumina el fondo de la butaca, aunque no haya llegado al final.
+const LOADER_TOTAL = SEATS_LINES.length * ZONE_DURATION + CUE_DELAY;
+
+function startSeatsLoader() {
+  seatsLoader.style.setProperty('--loader-duration', `${LOADER_TOTAL}ms`);
+  seatsLoader.classList.add('is-visible');
+  requestAnimationFrame(() => seatsLoader.classList.add('is-running'));
+}
+
+function hideSeatsLoader() {
+  seatsLoader.classList.remove('is-visible');
+}
 
 function renderSeatsZone(zone) {
   if (zone === FINAL_ZONE) {
     seatsBg.src = 'assets/3-butaca-2.webp';
-    seatsLine.classList.remove('is-visible');
-    seatsPin.classList.add('is-final');
+    seatsLines.forEach((el) => el.classList.remove('is-visible'));
+    hideSeatsLoader();
     setTimeout(() => seatsWelcome.classList.add('is-visible'), WELCOME_DELAY);
-    setTimeout(() => seatsCue.classList.add('is-visible'), CUE_DELAY);
+    setTimeout(() => {
+      seatsCue.classList.add('is-visible');
+      seatsPin.classList.add('is-final');
+    }, CUE_DELAY);
   } else {
     seatsBg.src = 'assets/3-butaca-1.webp';
     seatsWelcome.classList.remove('is-visible');
     seatsPin.classList.remove('is-final');
     seatsCue.classList.remove('is-visible');
-    seatsLine.textContent = SEATS_LINES[zone];
-    seatsLine.classList.remove('is-visible');
-    requestAnimationFrame(() => seatsLine.classList.add('is-visible'));
+    const current = seatsLines[zone % 2];
+    const previous = seatsLines[(zone + 1) % 2];
+    current.textContent = SEATS_LINES[zone];
+    previous.classList.remove('is-visible'); // se desvanece a la vez que entra la nueva
+    requestAnimationFrame(() => current.classList.add('is-visible'));
+    if (zone === FINAL_ZONE - 1) {
+      setTimeout(() => current.classList.remove('is-visible'), ZONE_DURATION - FADE_OUT);
+    }
   }
 }
 
@@ -140,6 +175,7 @@ if (seatsWrapper) {
   const seatsObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
+        startSeatsLoader();
         playSeatsZone(0);
         seatsObserver.unobserve(entry.target);
       }
