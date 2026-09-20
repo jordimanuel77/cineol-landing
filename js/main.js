@@ -121,11 +121,10 @@ const WELCOME_DELAY = 900;
 const FADE_OUT = 800;
 const CUE_DELAY = 1900;
 
-// El loader (sobre el sitio donde saldrá el logo de la butaca) se rellena
-// desde que aparece la primera frase, calculado para completarse justo cuando
-// aparece "Pulsa sobre la butaca". Se oculta de golpe (sin fade) antes, en
-// cuanto se ilumina el fondo de la butaca, aunque no haya llegado al final.
-const LOADER_TOTAL = SEATS_LINES.length * ZONE_DURATION + CUE_DELAY;
+// El loader (barra encima de la butaca) se rellena desde que aparece la
+// primera frase y se completa justo cuando termina de desvanecerse la última
+// (= momento en que se ilumina el fondo). Ahí se oculta de golpe, sin fade.
+const LOADER_TOTAL = SEATS_LINES.length * ZONE_DURATION;
 
 function startSeatsLoader() {
   seatsLoader.style.setProperty('--loader-duration', `${LOADER_TOTAL}ms`);
